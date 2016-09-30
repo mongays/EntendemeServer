@@ -6,7 +6,8 @@
 package com.entendeme.rest.service;
 
 import com.entendeme.rest.domain.Request;
-import com.sun.jersey.multipart.FormDataParam;
+import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
+import org.glassfish.jersey.media.multipart.FormDataParam;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -100,7 +101,9 @@ public class RequestsResource {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json")
         public Response postimage(
+            @FormDataParam("file") FormDataContentDisposition fileDetail,
             @FormDataParam("file") InputStream uploadedInputStream,
+            
             @PathParam("idRequest") String id )
         {    
         if (id == null) { //si no se pasó el ID...
