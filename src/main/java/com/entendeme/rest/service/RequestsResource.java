@@ -100,7 +100,7 @@ public class RequestsResource {
     @POST
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces("application/json")
-        public Response postimage(
+        public Request postimage(
             @FormDataParam("file") FormDataContentDisposition fileDetail,
             @FormDataParam("file") InputStream uploadedInputStream,
             
@@ -115,15 +115,20 @@ public class RequestsResource {
             int idx = requests.indexOf($temp);  //... obtenemos su índice...
             Request actual = requests.get(idx); //... lo obtenemos de la colección...
             String filePath = "./" + id + "/" + actual.getNombreImagen() + actual.getFormatoImagen();// + contentDispositionHeader.getFileName();
-            actual.setImagen(uploadedInputStream);
+            actual.setPathImagenServer(filePath);
+            actual.settextoConvertido("Aqui va el Texto Convertido para el Request " + actual.getIdRequest());
+            actual.setconversionResult("OK");
             writeToFile(uploadedInputStream,filePath);    
-            return Response.ok().build(); //... para que lo devuelva al cliente.
+            return actual;
+            //return Response.ok().build(); //... para que lo devuelva al cliente.
         }
-        return Response.serverError().build(); //.. si no lo encuentra, devuelve null
+        $temp.setconversionResult("ERROR1");
+        return $temp;
+        //return Response.serverError().build(); //.. si no lo encuentra, devuelve null
     
     }
 
-        
+        /*
     @Path("{idRequest}/doc/")
     @GET
     @Produces(MediaType.MULTIPART_FORM_DATA)
@@ -144,7 +149,7 @@ public class RequestsResource {
         }
         return null; //.. si no lo encuentra, devuelve null
     
-    }    
+    }    */
         
     public void cambiarRequest(Request actual, Request p) {
         int idx = requests.indexOf(actual); //... obtiene la posición del actual

@@ -24,7 +24,9 @@ public class Request {
     private String nombreImagen;
     private String formatoImagen;
     private String rutaImagen;
-    private InputStream Imagen;
+    private String PathImagenServer;
+    private String textoConvertido;
+    private String conversionResult;
 
     public static String getNuevoId(String nombreUsuario) {
         Date myDate = new Date();
@@ -81,13 +83,31 @@ public class Request {
         this.rutaImagen = ruta;
     }
 
-    public InputStream getImagen() {
-        return Imagen;
+    public String getPathImagenServer() {
+        return PathImagenServer;
     }
 
-    public void setImagen(InputStream Imagen) {
-        this.Imagen = Imagen;
+    public void setPathImagenServer(String PathImagenServer) {
+        this.PathImagenServer = PathImagenServer;
     }    
+    
+    public String gettextoConvertido() {
+        return textoConvertido;
+    }
+    
+    public void settextoConvertido(String textoConvertido) {
+        this.textoConvertido = textoConvertido;
+    }  
+
+    public void setconversionResult(String conversionResult) {
+        this.conversionResult = conversionResult;
+    }  
+    
+    public String getconversionResult() {
+        return conversionResult;
+    }
+
+
     
     @Override
     public boolean equals(Object obj) {
