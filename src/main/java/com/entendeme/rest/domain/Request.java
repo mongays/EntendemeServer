@@ -5,11 +5,24 @@
  */
 package com.entendeme.rest.domain;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Scanner;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -106,8 +119,53 @@ public class Request {
     public String getconversionResult() {
         return conversionResult;
     }
+    
+    public void ConvertImage()  {
+        String s;
+        Process p;
+        try {
+            String tessdata_path= " --tessdata-dir /opt/tesseract-master/tessdata ";
+            String comando = "tesseract" + tessdata_path +" -l spa " + this.getPathImagenServer() + " ./" + this.getIdRequest() + "/" + this.getNombreImagen();
+            p = Runtime.getRuntime().exec(comando);
+                        BufferedReader br = new BufferedReader(
+                new InputStreamReader(p.getInputStream()));
+                        BufferedReader be = new BufferedReader(
+                new InputStreamReader(p.getErrorStream()));
+            while ((s = be.readLine()) != null)
+            System.out.println("line: " + s);
+            while ((s = br.readLine()) != null)
+            System.out.println("line: " + s);
+            int exitval = p.waitFor();
+            System.out.println ("exit: " + p.exitValue());
+            p.destroy();
+            this.CargarTextoConvertido();
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
+   public void CargarTextoConvertido()  {   
+       
+       String textoPath = "./" + this.getIdRequest() + "/" + this.getNombreImagen() + ".txt";
+        try {
+            this.settextoConvertido(readFile(textoPath,Charset.defaultCharset()));
+            this.setconversionResult("OK");
+           } catch (IOException ex) {
 
+            Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       
+   }
+
+        static String readFile(String path, Charset encoding) 
+          throws IOException 
+        {
+          byte[] encoded = Files.readAllBytes(Paths.get(path));
+          return new String(encoded, encoding);
+        }
     
     @Override
     public boolean equals(Object obj) {
