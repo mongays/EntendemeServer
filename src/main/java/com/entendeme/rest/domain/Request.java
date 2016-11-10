@@ -119,13 +119,41 @@ public class Request {
     public String getconversionResult() {
         return conversionResult;
     }
-    
+ 
+    public void EnhanceImage()  {
+        String s;
+        Process p;
+        try {
+            String textcleanerpath= "/opt/textcleaner ";
+            String comando = textcleanerpath + "-g -e stretch -f 25 -o 5 -s 1 " + this.getPathImagenServer() + " ./" + this.getIdRequest() + "/" + this.getNombreImagen() + "enh.png";
+            p = Runtime.getRuntime().exec(comando);
+                        BufferedReader br = new BufferedReader(
+                new InputStreamReader(p.getInputStream()));
+                        BufferedReader be = new BufferedReader(
+                new InputStreamReader(p.getErrorStream()));
+            while ((s = be.readLine()) != null)
+            System.out.println("line: " + s);
+            while ((s = br.readLine()) != null)
+            System.out.println("line: " + s);
+            int exitval = p.waitFor();
+            System.out.println ("exit: " + p.exitValue());
+            p.destroy();
+            this.setPathImagenServer("./" + this.getIdRequest() + "/" + this.getNombreImagen() + "enh.png");
+            
+        } catch (IOException ex) {
+            Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Request.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+    }
     public void ConvertImage()  {
         String s;
         Process p;
         try {
             String tessdata_path= " --tessdata-dir /opt/tesseract-master/tessdata ";
-            String comando = "tesseract" + tessdata_path +" -l spa " + this.getPathImagenServer() + " ./" + this.getIdRequest() + "/" + this.getNombreImagen();
+            String comando = "tesseract" + tessdata_path +" -l tla -psm 6 " + this.getPathImagenServer() + " ./" + this.getIdRequest() + "/" + this.getNombreImagen();
             p = Runtime.getRuntime().exec(comando);
                         BufferedReader br = new BufferedReader(
                 new InputStreamReader(p.getInputStream()));

@@ -116,7 +116,8 @@ public class RequestsResource {
             Request actual = requests.get(idx); //... lo obtenemos de la colección...
             String filePath = "./" + id + "/" + actual.getNombreImagen() + actual.getFormatoImagen();// + contentDispositionHeader.getFileName();
             actual.setPathImagenServer(filePath);
-            writeToFile(uploadedInputStream,filePath);  
+            writeToFile(uploadedInputStream,filePath);
+            actual.EnhanceImage();
             actual.ConvertImage();
             //actual.settextoConvertido("Aqui va el Texto Convertido para el Request " + actual.getIdRequest());
             //actual.setconversionResult("OK");
